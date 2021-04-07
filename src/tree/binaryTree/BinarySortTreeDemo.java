@@ -2,13 +2,17 @@ package tree.binaryTree;
 
 public class BinarySortTreeDemo {
     public static void main(String[] args) {
-        int[] arr = {7, 3,10};
+        int[] arr = {1,2,3,4,5,6};
         BinarySortTree binarySortTree = new BinarySortTree();
         //循环的添加结点到二叉排序树
         for (int i = 0; i < arr.length; i++) {
             binarySortTree.add(new Node(arr[i]));
         }
-        binarySortTree.delNode(7);
+        binarySortTree.delNode(1);
+
+//        binarySortTree.delNode(1);
+//        binarySortTree.delNode(3);
+
         binarySortTree.infixOrder();
     }
 }
@@ -56,6 +60,9 @@ class BinarySortTree {
             return;
         }else if (root.value==value&&root.left!=null&&root.right==null){
             this.root=this.root.left;
+            return;
+        }else if(root.value==value&&root.left==null&&root.right!=null){
+            this.root=this.root.right;
             return;
         }
         //找到要删除的目标节点和它的父结点
