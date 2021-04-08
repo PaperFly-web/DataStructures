@@ -1,26 +1,28 @@
-package tree.binaryTree;
+package tree.avl;
 
-public class BinarySortTreeDemo {
+
+
+public class AVLTreeDemo {
     public static void main(String[] args) {
         int[] arr = {1,2,3,4,5,6};
-        BinarySortTree binarySortTree = new BinarySortTree();
+        ALVTree avlTree = new ALVTree();
         //循环的添加结点到二叉排序树
         for (int i = 0; i < arr.length; i++) {
-            binarySortTree.add(new Node(arr[i]));
+            avlTree.add(new Node(arr[i]));
         }
-        binarySortTree.delNode(1);
-
-//        binarySortTree.delNode(1);
-//        binarySortTree.delNode(3);
-
-        binarySortTree.infixOrder();
+//        System.out.println(avlTree.getRoot().leftHeight());
+//        avlTree.infixOrder();
+//        System.out.println(avlTree.getRoot().right.left);
     }
+
 }
 
-class BinarySortTree {
+class ALVTree{
     private Node root;
 
-
+    public Node getRoot(){
+        return root;
+    }
     public void add(Node node) {
         if (root == null) {
             root = node;
@@ -132,12 +134,95 @@ class Node {
     Node left;
     Node right;
 
+
     public Node(int value) {
         this.value = value;
     }
 
+    /**
+     * RR类型
+     */
+    public void rrRoate(){
+        //1),创建一个新的节点，值为当前节点的值
+        Node newNode = new Node(this.value);
+        //2)让新节点的右指针，指向当前节点  右子结点的左节点
+        newNode.right=this.right.left;
+        //3）新节点的左指针，指向当前节点的左子树
+        newNode.left=this.left;
+        //4）让当前节点的值，等于右子结点的值
+        this.value=this.right.value;
+        //5)让当前节点的右指针，指向当前节点的右子树的右子树
+        this.right=this.right.right;
+        //6)让当前结点的左指针，指向新创建的节点
+        this.left=newNode;
+    }
 
+    /**
+     * LL类型
+     */
+    public void llRoate(){
+        //1)创建一个新的结点，值为当前节点的值
+        Node newNode = new Node(this.value);
+        //2)让新节点的左指针，指向当前节点  左子结点的右节点
+        newNode.left=this.left.right;
+        //3）新节点的右指针，指向当前节点的右子树
+        newNode.right=this.right;
+        //4)让当前节点的值，等于左子结点的值
+        this.value=this.left.value;
+        //5)让当前节点的左指针，指向当前节点的左子树的左子树
+        this.left=this.left.left;
+        //6)让当前结点的右指针，指向新创建的节点
+        this.right=newNode;
+    }
 
+    /**
+     * LR型
+     */
+    public void lrRoate(){
+        //1)把当前节点的左子树，进行一次RR
+        this.left.rrRoate();
+        //2)在对当前节点进行一次ll
+        this.llRoate();
+    }
+
+    /**
+     * RL型
+     */
+    public void rlRoate(){
+        //1)把当前节点的右子树，进行一次LL
+        this.right.llRoate();
+        //2)在对当前节点进行一次ll
+        this.rrRoate();
+    }
+    /**
+     * 查找以当前节点为根节点，左子树的高度
+     * @return
+     */
+    public int leftHeight(){
+        if(left==null){
+            return 0;
+        }
+        return left.height();
+    }
+
+    /**
+     * 查找以当前节点为根节点，右子树的高度
+     * @return
+     */
+    public int rightHeight(){
+        if(right==null){
+            return 0;
+        }
+        return right.height();
+    }
+    /**
+     * 查找以当前节点为根节点，树的高度
+     * @return
+     */
+    public int height(){
+
+        return Math.max(left==null?0:left.height(),right==null?0:right.height())+1;
+    }
 
     /**
      * 搜索结点,查找到就返回结点，找不到就返回null
@@ -210,6 +295,32 @@ class Node {
                 this.right = node;
             } else {
                 this.right.add(node);
+            }
+        }
+
+        //在添加节点的时候，进行平衡二叉树
+        //1)左子树，大于右子树的情况
+        if ((this.leftHeight()-this.rightHeight())>1){
+            //先判断是LL型，还是LR型
+            //1.2）判断是不是LL型
+            //如果左指针的左子树高度，大于左指针的右子树高度，说明就是LL型
+            if(this.left.leftHeight()>this.left.rightHeight()){
+                this.llRoate();
+            }else {//否则就是LR型
+                this.lrRoate();
+            }
+            return;
+        }
+
+        //2)右子树大于左子树的情况
+        if ((this.rightHeight()-this.leftHeight())>1){
+            //先判断是RR型，还是RL型
+            //1.2）判断是不是RR型
+            //如果左指针的左子树高度，大于左指针的右子树高度，说明就是LL型
+            if(this.right.rightHeight()>this.right.leftHeight()){
+                this.rrRoate();
+            }else {//否则就是RL型
+                this.rlRoate();
             }
         }
     }
