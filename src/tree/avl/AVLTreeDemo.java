@@ -1,6 +1,7 @@
 package tree.avl;
 
 
+import java.util.HashMap;
 
 public class AVLTreeDemo {
     public static void main(String[] args) {
@@ -13,6 +14,7 @@ public class AVLTreeDemo {
 //        System.out.println(avlTree.getRoot().leftHeight());
 //        avlTree.infixOrder();
 //        System.out.println(avlTree.getRoot().right.left);
+
     }
 
 }
@@ -287,13 +289,13 @@ class Node {
         if (node.value < this.value) {
             if (this.left == null) {
                 this.left = node;
-            } else {
+            } else {//如果左子树不为空，就递归
                 this.left.add(node);
             }
         } else {//如果大于等于，就挂到右子树
             if (this.right == null) {
                 this.right = node;
-            } else {
+            } else {//如果右子树不为空，就递归
                 this.right.add(node);
             }
         }
