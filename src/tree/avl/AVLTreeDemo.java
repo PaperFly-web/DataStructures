@@ -56,7 +56,6 @@ class ALVTree{
         if (root == null) {//如果root为空，就不用删除了
             return;
         }
-
         //单独处理，如果要删除的是根节点,并且删除的树是  光杆或者只有一个子树
         //如果要删除的是根节点，但是这个树有2个子树，那么可以满足 =》 删除的节点，有2个子树，后面程序会处理
         if (root.value == value&&root.left==null&&root.right==null) {

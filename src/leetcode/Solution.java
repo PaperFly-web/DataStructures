@@ -8,6 +8,7 @@ public class Solution {
         ListNode head2;
         ListNode listNode=new ListNode();
         ListNode listNode2=new ListNode();
+
         head1=listNode;
         head2=listNode2;
         listNode.val=3;
